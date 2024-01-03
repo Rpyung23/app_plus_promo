@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:plus_promo/model/usuario/login_usuario_model.dart';
-import 'package:plus_promo/provider/ProviderUsuario.dart';
+import 'package:plus_promo/provider/ProviderClient.dart';
 import 'package:plus_promo/util/color.dart';
 import 'package:plus_promo/util/dimensiones.dart';
 import 'package:plus_promo/util/textos.dart';
@@ -89,7 +89,7 @@ class LoginPage extends StatelessWidget {
   }
 
   _initLoginUsuario(context) async {
-    LoginUsuarioModel oL = await ProviderUsuario.loginUsuario(
+    LoginUsuarioModel oL = await ProviderClient.loginClient(
         oTextInputControllerUsuario.text, oTextInputControllerPass.text);
 
     if (oL.statusCode == 200) {

@@ -42,3 +42,11 @@ const String subtitle_card_cupon = "20% de Descuento en helados de mora";
 const String title_chip_cupon = "Cupones";
 const String title_chip_cajeados = "Canjeados";
 const String title_chip_expirados = "Experiados";
+
+const String texto_vacio = "Por favor ingresa algún texto";
+
+const String texto_pass_corta = "Su contraseña debe ser 9 dijitos";
+
+const String texto_pass_difirente = "Su contraseña no coincide";
+
+const String texto_email_invalid = "Email no válido";
