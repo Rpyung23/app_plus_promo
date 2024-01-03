@@ -2,8 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:plus_promo/model/usuario/login_usuario_model.dart';
+import 'package:plus_promo/model/usuario_vendedor/login_usuario_model.dart';
 import 'package:plus_promo/provider/ProviderClient.dart';
+import 'package:plus_promo/provider/ProviderVendedor.dart';
 import 'package:plus_promo/util/color.dart';
 import 'package:plus_promo/util/dimensiones.dart';
 import 'package:plus_promo/util/textos.dart';
@@ -89,11 +90,35 @@ class LoginPage extends StatelessWidget {
   }
 
   _initLoginUsuario(context) async {
-    LoginUsuarioModel oL = await ProviderClient.loginClient(
+    LoginClienteVendedorModel oL = await ProviderClient.loginClient(
         oTextInputControllerUsuario.text, oTextInputControllerPass.text);
 
     if (oL.statusCode == 200) {
       Navigator.of(context).pushNamed("/home_page");
+    } else if (oL.statusCode == 300) {
+      LoginClienteVendedorModel oLV = await ProviderVendedor.loginVendedor(
+          oTextInputControllerUsuario.text, oTextInputControllerPass.text);
+      if (oLV.statusCode == 200) {
+        Navigator.of(context).pushNamed("/home_page");
+      } else if (oLV.statusCode == 300 && oL.statusCode == 300) {
+        Fluttertoast.showToast(
+            msg: 'USUARIO NO ENCONTRADO',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: color_info,
+            textColor: color_secondary,
+            fontSize: 16.0);
+      } else {
+        Fluttertoast.showToast(
+            msg: oLV.msm!,
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
     } else {
       Fluttertoast.showToast(
           msg: oL.msm!,

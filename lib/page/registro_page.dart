@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:plus_promo/model/response_model.dart';
 import 'package:plus_promo/provider/ProviderClient.dart';
+import 'package:plus_promo/provider/ProviderVendedor.dart';
 import 'package:plus_promo/util/color.dart';
 import 'package:plus_promo/util/dimensiones.dart';
 import 'package:plus_promo/util/textos.dart';
@@ -148,14 +149,25 @@ class _RegsitroPageState extends State<RegsitroPage> {
       Fluttertoast.showToast(msg: texto_vacio, backgroundColor: color_danger);
       return;
     }
-    ResponseModel oR = await ProviderClient.createClient(
-        widget.oTextEditingControllerEmail.text,
-        widget.oTextEditingControllerPass.text,
-        widget.oTextEditingControllerName.text,
-        "",
-        "M",
-        "1998-06-11",
-        "XXXX XXX XXX");
+
+    ResponseModel oR = widget.tipo_registro == 'c'
+        ? await ProviderClient.createClient(
+            widget.oTextEditingControllerEmail.text,
+            widget.oTextEditingControllerPass.text,
+            widget.oTextEditingControllerName.text,
+            "",
+            "M",
+            "1998-06-11",
+            "XXXX XXX XXX")
+        : await ProviderVendedor.createVendedor(
+            widget.oTextEditingControllerEmail.text,
+            widget.oTextEditingControllerPass.text,
+            widget.oTextEditingControllerName.text);
+
+    if (oR.statusCode == 200) {
+      _clearFormCreate();
+    }
+
     Fluttertoast.showToast(
         msg: oR.msm!,
         backgroundColor: oR.statusCode == 200
@@ -171,5 +183,12 @@ class _RegsitroPageState extends State<RegsitroPage> {
     return RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(value);
+  }
+
+  _clearFormCreate() {
+    widget.oTextEditingControllerName.clear();
+    widget.oTextEditingControllerEmail.clear();
+    widget.oTextEditingControllerPass.clear();
+    widget.oTextEditingControllerPassCon.clear();
   }
 }

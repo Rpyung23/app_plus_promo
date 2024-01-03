@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:plus_promo/model/usuario/login_usuario_model.dart';
+import 'package:plus_promo/model/usuario_vendedor/login_usuario_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:plus_promo/util/url.dart';
 
@@ -9,16 +9,16 @@ import '../model/response_model.dart';
 class ProviderClient {
   ProviderClient() {}
 
-  static Future<LoginUsuarioModel> loginClient(usuario, pass) async {
+  static Future<LoginClienteVendedorModel> loginClient(usuario, pass) async {
     try {
       http.Response response = await http.post(Uri.parse(url_login_client),
           encoding: encondingApi,
           headers: headersApi,
           body: jsonEncode({'user': usuario, 'pass': pass}));
 
-      return LoginUsuarioModel.fromRawJson(response.body);
+      return LoginClienteVendedorModel.fromRawJson(response.body);
     } catch (e) {
-      return LoginUsuarioModel(statusCode: 400, msm: e.toString());
+      return LoginClienteVendedorModel(statusCode: 400, msm: e.toString());
     }
   }
 

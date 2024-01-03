@@ -2,28 +2,28 @@ import 'dart:convert';
 
 import 'data_login_usuario_model.dart';
 
-class LoginUsuarioModel {
+class LoginClienteVendedorModel {
   int? statusCode;
-  DataLoginUsuarioModel? data;
+  DataLoginClienteVendedorModel? data;
   String? msm;
 
-  LoginUsuarioModel({
+  LoginClienteVendedorModel({
     this.statusCode,
     this.data,
     this.msm,
   });
 
-  factory LoginUsuarioModel.fromRawJson(String str) =>
-      LoginUsuarioModel.fromJson(json.decode(str));
+  factory LoginClienteVendedorModel.fromRawJson(String str) =>
+      LoginClienteVendedorModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory LoginUsuarioModel.fromJson(Map<String, dynamic> json) =>
-      LoginUsuarioModel(
+  factory LoginClienteVendedorModel.fromJson(Map<String, dynamic> json) =>
+      LoginClienteVendedorModel(
         statusCode: json["status_code"],
         data: json["data"] == null
             ? null
-            : DataLoginUsuarioModel.fromJson(json["data"]),
+            : DataLoginClienteVendedorModel.fromJson(json["data"]),
         msm: json["msm"],
       );
 
