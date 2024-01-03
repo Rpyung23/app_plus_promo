@@ -41,6 +41,8 @@ dependencies:
   qr_flutter: ^4.1.0
   http: ^1.1.2
   fluttertoast: ^8.2.4
+  flutter_native_splash: ^2.3.9
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +70,28 @@ flutter:
   assets:
     - assets/
   #   - images/a_dot_ham.jpeg
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/logo.png
+  #branding: assets/vigitrack_toolbar.png
+  color_dark: "#ffffff"
+  image_dark: assets/logo.png
+  #branding_dark: assets/vigitrack_toolbar.png
+
+  android_12:
+    image: assets/logo.png
+    icon_background_color: "#ffffff"
+    image_dark: assets/logo.png
+    icon_background_color_dark: "#ffffff"
+
+  web: false
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo.png"
+  adaptive_icon_background: "assets/logo.png"
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

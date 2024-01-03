@@ -5,7 +5,7 @@ const String hint_email = "Correo electrónico";
 const String hint_pass = "Contraseña";
 
 const String txt_miembro = "¿No eres miembro todavia?";
-const String txt_registro = "¡Registrate gratis!";
+const String txt_registro = " ¡Registrate gratis!";
 
 const String toolbar_cliente = "REGISTRO CLIENTE";
 const String toolbar_vendedor = "REGISTRO VENDEDOR";
