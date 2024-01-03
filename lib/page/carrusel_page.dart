@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:plus_promo/page/registro_page.dart';
 import 'package:plus_promo/util/color.dart';
 import 'package:plus_promo/util/dimensiones.dart';
 import 'package:plus_promo/util/textos.dart';
@@ -38,8 +39,8 @@ class CarruselPage extends StatelessWidget {
                 text: txt_cliente,
                 colorButton: color_primary,
                 colorText: color_secondary,
-            context: context,
-            tipo_registro: 'c'),
+                context: context,
+                tipo_registro: 'c'),
             button(
                 text: txt_vender,
                 colorButton: color_secondary,
@@ -61,7 +62,8 @@ class CarruselPage extends StatelessWidget {
       Color colorText = Colors.white,
       Color colorButton = Colors.purple,
       double padding = 12,
-       required BuildContext context,required String tipo_registro}) {
+      required BuildContext context,
+      required String tipo_registro}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: padding, vertical: padding),
       child: ElevatedButton(
@@ -79,9 +81,12 @@ class CarruselPage extends StatelessWidget {
             style: TextStyle(
                 color: colorText, fontSize: 18.0, fontWeight: FontWeight.bold)),
         onPressed: () {
-          Navigator.of(context).pushNamed('/registro_page',arguments: {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
+                  RegsitroPage(tipo_registro: tipo_registro)));
+          /*Navigator.of(context).pushNamed('/registro_page',arguments: {
             tipo_registro: tipo_registro
-          });
+          });*/
         },
       ),
     );
