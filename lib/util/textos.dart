@@ -52,3 +52,5 @@ const String texto_pass_difirente = "Su contraseña no coincide";
 const String texto_email_invalid = "Email no válido";
 
 const String txt_code_storage = "CODE_STORAGE_PROMO";
+
+const String code_secure = 'codigo';

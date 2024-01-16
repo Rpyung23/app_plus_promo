@@ -10,10 +10,18 @@ class SecureData {
 
   static saveStoragePreference(email) async {
     try {
-      await storage.write(key: 'codigo', value: email);
+      await storage.write(key: code_secure, value: email);
       return true;
     } catch (e) {
       return false;
+    }
+  }
+
+  static getStoragePreference() async {
+    try {
+      return await storage.read(key: code_secure);
+    } catch (e) {
+      return null;
     }
   }
 }

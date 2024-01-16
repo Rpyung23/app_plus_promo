@@ -1,11 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:plus_promo/model/store_model.dart';
 import 'package:plus_promo/provider/ProviderCupon.dart';
 import 'package:plus_promo/util/color.dart';
 import 'package:plus_promo/util/dimensiones.dart';
+import 'package:plus_promo/util/secure_data.dart';
 
+import '../model/create_cupon.dart';
+import '../provider/ProviderStorage.dart';
 import '../util/icons.dart';
 
 class CreateCuponPage extends StatefulWidget {
@@ -152,9 +157,49 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
     setState(() {});
   }
 
-  _initCreateCupon() {
-    /*ProviderCreateCupon.createCupon(o, widget.oTextEditingControllerName.text, 
-    widget.oTextEditingControllerPor.text, widget.oTextEditingControllerFExp.text, 
-    widget.oTextEditingControllerCantCu.text, foto)*/
+  _initCreateCupon() async {
+    String? code = SecureData.getStoragePreference();
+    if (code == null) {
+      Fluttertoast.showToast(
+          msg: "ERROR STORAGE PREFERENCE",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      return;
+    }
+
+    StorageModel oStorageModel =
+        await ProviderStorage.createStore(File(widget.oXFile!.path));
+
+    CreateCuponModel oCreateCuponModel = await ProviderCreateCupon.createCupon(
+        code,
+        widget.oTextEditingControllerName.text,
+        widget.oTextEditingControllerPor.text,
+        widget.oTextEditingControllerFExp.text,
+        widget.oTextEditingControllerCantCu.text,
+        '');
+
+    if (oCreateCuponModel.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "CUPON CON EXITO",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: color_primary,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      Fluttertoast.showToast(
+          msg: "ERROR CUPON",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: color_danger,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
 }
