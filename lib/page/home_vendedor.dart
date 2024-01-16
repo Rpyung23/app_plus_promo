@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:plus_promo/util/color.dart';
 import 'package:plus_promo/util/dimensiones.dart';
 import 'package:plus_promo/util/icons.dart';
@@ -38,7 +37,9 @@ class _HomeVendedorState extends State<HomeVendedor> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed('/create_cupon_page');
+          },
           backgroundColor: color_primary,
           child: icon_plus_white,
         ),

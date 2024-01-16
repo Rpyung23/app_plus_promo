@@ -18,3 +18,8 @@ const icon_plus_white = Icon(
   Iconsax.add,
   color: Colors.white,
 );
+
+const icon_cupon = Icon(Iconsax.ticket);
+const icon_porcent = Icon(Iconsax.discount_circle);
+const icon_fecha = Icon(Iconsax.calendar);
+const icon_cant_cupons = Icon(Iconsax.coin_1);

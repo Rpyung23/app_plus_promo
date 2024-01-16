@@ -16,3 +16,7 @@ const url_login_vendedor = "${BASE_URL}/login_admin";
 const url_create_client = "${BASE_URL}/create_client";
 
 const url_create_vendedor = "${BASE_URL}/create_admin";
+
+const url_create_cupon = "${BASE_URL}/create_cupon";
+
+const url_upload_foto = "${BASE_URL}/upload_foto";

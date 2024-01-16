@@ -5,8 +5,10 @@ import 'package:plus_promo/page/home_vendedor.dart';
 import 'package:plus_promo/page/qr_cupon_page.dart';
 import 'package:plus_promo/page/registro_page.dart';
 import 'categoria_cupon_page.dart';
+import 'create_cupon.dart';
 import 'cupones_list_page.dart';
 import 'login_page.dart';
+import 'session_page.dart';
 
 class AppPage extends StatelessWidget {
   const AppPage({super.key});
@@ -25,12 +27,15 @@ class AppPage extends StatelessWidget {
         '/cupones_list': (_) => CuponesListPage(),
         '/qr_cupon_page': (_) => QrCuponPage(),
         '/home_vendedor': (_) => HomeVendedor(),
+        '/session_page': (_) => SessionPage(),
+        '/create_cupon_page': (_) => CreateCuponPage(),
         '/': (_) => LoginPage()
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      initialRoute: '/',
     );
   }
 }

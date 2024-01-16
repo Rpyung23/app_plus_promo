@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:plus_promo/page/categoria_cupon_page.dart';
 import 'package:plus_promo/page/cupones_list_page.dart';
-import 'package:plus_promo/util/color.dart';
-import 'package:plus_promo/util/dimensiones.dart';
 import 'package:plus_promo/util/icons.dart';
 import 'package:plus_promo/util/textos.dart';
-
-import 'qr_cupon_page.dart';
 
 class HomePage extends StatefulWidget {
   int opc_menu = 0;
