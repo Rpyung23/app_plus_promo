@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-const BASE_URL = "http://159.223.111.107:3009";
+const BASE_URL = "http://66.240.205.86:3010";
 
 const headersApi = {
   'Content-Type': 'application/json; charset=UTF-8',
@@ -18,5 +18,7 @@ const url_create_client = "${BASE_URL}/create_client";
 const url_create_vendedor = "${BASE_URL}/create_admin";
 
 const url_create_cupon = "${BASE_URL}/create_cupon";
+
+const url_list_cupon = "${BASE_URL}/read_all_cupon";
 
 const url_upload_foto = "${BASE_URL}/upload_foto";

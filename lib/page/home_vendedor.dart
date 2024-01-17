@@ -3,16 +3,27 @@ import 'package:plus_promo/util/color.dart';
 import 'package:plus_promo/util/dimensiones.dart';
 import 'package:plus_promo/util/icons.dart';
 
+import '../model/cupon_lista/cupon_lista.dart';
+import '../model/cupon_lista/data_cupon_lista.dart';
+import '../provider/ProviderCupon.dart';
 import '../util/textos.dart';
 
 class HomeVendedor extends StatefulWidget {
-  const HomeVendedor({super.key});
+  ListCuponModel oListCuponModel = ListCuponModel(datos: []);
+  HomeVendedor({super.key});
 
   @override
   State<HomeVendedor> createState() => _HomeVendedorState();
 }
 
 class _HomeVendedorState extends State<HomeVendedor> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getCuponLista();
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -37,8 +48,9 @@ class _HomeVendedorState extends State<HomeVendedor> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).pushNamed('/create_cupon_page');
+          onPressed: () async {
+            await Navigator.of(context).pushNamed('/create_cupon_page');
+            _getCuponLista();
           },
           backgroundColor: color_primary,
           child: icon_plus_white,
@@ -71,31 +83,30 @@ class _HomeVendedorState extends State<HomeVendedor> {
   }
 
   _getBodyHomeVendedor() {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        _itemHomeVendedor(),
-        _itemHomeVendedor(),
-        _itemHomeVendedor(),
-        _itemHomeVendedor(),
-        _itemHomeVendedor(),
-        _itemHomeVendedor(),
-        _itemHomeVendedor(),
-        _itemHomeVendedor()
-      ],
-    );
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: widget.oListCuponModel.datos!.length,
+        itemBuilder: (context, index) {
+          return _itemHomeVendedor(widget.oListCuponModel.datos![index]);
+        });
   }
 
-  _itemHomeVendedor() {
+  _itemHomeVendedor(DatoCuponLista oD) {
     return Card(
       child: Column(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
-            leading: Image.asset("./assets/logo.png"),
+            leading: Image.network(
+              oD.fotoCupon!,
+              fit: BoxFit.cover,
+              repeat: ImageRepeat.noRepeat,
+              height: 75,
+              width: 75,
+            ),
             title: Text(
-              "% Descuento",
+              oD.nombreCupon!,
               style: TextStyle(
                   color: color_accent,
                   fontWeight: FontWeight.w700,
@@ -111,5 +122,10 @@ class _HomeVendedorState extends State<HomeVendedor> {
         ],
       ),
     );
+  }
+
+  _getCuponLista() async {
+    widget.oListCuponModel = await ProviderCreateCupon.readCuponList();
+    setState(() {});
   }
 }

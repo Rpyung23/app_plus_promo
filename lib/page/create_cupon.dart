@@ -158,7 +158,7 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
   }
 
   _initCreateCupon() async {
-    String? code = SecureData.getStoragePreference();
+    String? code = await SecureData.getStoragePreference();
     if (code == null) {
       Fluttertoast.showToast(
           msg: "ERROR STORAGE PREFERENCE",
@@ -171,8 +171,33 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
       return;
     }
 
+    if (widget.oXFile == null) {
+      Fluttertoast.showToast(
+          msg: "SELECCIONAR IMAGEN PARA EL CUPON",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: color_success,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      return;
+    }
+
     StorageModel oStorageModel =
-        await ProviderStorage.createStore(File(widget.oXFile!.path));
+        await ProviderStorage.createStore(widget.oXFile!);
+
+    if (oStorageModel.downloadUrl == null) {
+      Fluttertoast.showToast(
+          msg: 'FOTO NO SUBIDA',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: color_info,
+          textColor: color_danger,
+          fontSize: 16.0);
+
+      return;
+    }
 
     CreateCuponModel oCreateCuponModel = await ProviderCreateCupon.createCupon(
         code,
@@ -180,20 +205,21 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
         widget.oTextEditingControllerPor.text,
         widget.oTextEditingControllerFExp.text,
         widget.oTextEditingControllerCantCu.text,
-        '');
+        oStorageModel.downloadUrl);
 
     if (oCreateCuponModel.statusCode == 200) {
       Fluttertoast.showToast(
-          msg: "CUPON CON EXITO",
+          msg: "CUPON CREADO CON EXITO",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
           backgroundColor: color_primary,
           textColor: Colors.white,
           fontSize: 16.0);
+      _clearForm();
     } else {
       Fluttertoast.showToast(
-          msg: "ERROR CUPON",
+          msg: oCreateCuponModel.msm!,
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
@@ -201,5 +227,14 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
           textColor: Colors.white,
           fontSize: 16.0);
     }
+  }
+
+  _clearForm() {
+    widget.oXFile = null;
+    widget.oTextEditingControllerName.clear();
+    widget.oTextEditingControllerPor.clear();
+    widget.oTextEditingControllerFExp.clear();
+    widget.oTextEditingControllerCantCu.clear();
+    setState(() {});
   }
 }
