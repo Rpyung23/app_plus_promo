@@ -113,7 +113,7 @@ class _HomeVendedorState extends State<HomeVendedor> {
                   fontSize: textBigMedium),
             ),
             subtitle: Text(
-              "Cantidad de cupones",
+              "DISPONIBLE : " + oD!.cantCupon.toString(),
               style: TextStyle(fontSize: textMediumSmall),
             ),
             trailing:
