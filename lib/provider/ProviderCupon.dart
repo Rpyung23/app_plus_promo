@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:plus_promo/model/response_model.dart';
 import 'package:plus_promo/util/secure_data.dart';
 
 import '../model/create_cupon.dart';
 import 'package:http/http.dart' as http;
 
 import '../model/cupon_lista/cupon_lista.dart';
+import '../model/cupon_lista/data_cupon_lista.dart';
 import '../util/url.dart';
 
 class ProviderCreateCupon {
@@ -44,6 +46,39 @@ class ProviderCreateCupon {
       return CreateCuponModel.fromRawJson(oResponse.body);
     } catch (e) {
       return CreateCuponModel(statusCode: 400, msm: e.toString());
+    }
+  }
+
+  static Future<ResponseModel> updateCupon(
+      DatoCuponLista oDatoCuponLista) async {
+    try {
+      http.Response oR = await http.put(Uri.parse(url_update_cupon),
+          headers: headersApi,
+          encoding: encondingApi,
+          body: jsonEncode({
+            "code_cupon": oDatoCuponLista.codeCupon,
+            "nombre_cupon": oDatoCuponLista.nombreCupon,
+            "porcetaje_descuento": oDatoCuponLista.porcetajeDescuento,
+            "fecha_expiracion": oDatoCuponLista.fechaExpiracion,
+            "cant_cupon": oDatoCuponLista.cantCupon
+          }));
+      return ResponseModel.fromRawJson(oR.body);
+    } catch (e) {
+      return ResponseModel(statusCode: 400, msm: e.toString());
+    }
+  }
+
+  static Future<ListCuponModel> readCuponClientList() async {
+    try {
+      //var email = await SecureData.getStoragePreference();
+
+      http.Response oResponse =
+          await http.get(Uri.parse(url_list_client_cupon), headers: headersApi);
+      print(oResponse.body);
+      return ListCuponModel.fromRawJson(oResponse.body);
+    } catch (e) {
+      print(e.toString());
+      return ListCuponModel(statusCode: 400, datos: [], msm: e.toString());
     }
   }
 }

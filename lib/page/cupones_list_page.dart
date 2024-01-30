@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../model/cupon_lista/cupon_lista.dart';
+import '../model/cupon_lista/data_cupon_lista.dart';
+import '../provider/ProviderCupon.dart';
 import '../util/color.dart';
 import '../util/dimensiones.dart';
 import '../util/textos.dart';
+import 'qr_cupon_page.dart';
 
 class CuponesListPage extends StatefulWidget {
-  const CuponesListPage({super.key});
+  ListCuponModel? oListCuponModel;
+  CuponesListPage({super.key});
 
   @override
   State<CuponesListPage> createState() => _CuponesListPageState();
 }
 
 class _CuponesListPageState extends State<CuponesListPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _initCuponList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,44 +42,58 @@ class _CuponesListPageState extends State<CuponesListPage> {
 
   _getBodyCuponesListaPage() {
     return Container(
-      child: ListView(
-        children: [
-          _getItem(),
-          _getItem(),
-          _getItem(),
-          _getItem(),
-          _getItem(),
-          _getItem(),
-          _getItem(),
-          _getItem(),
-          _getItem(),
-          _getItem(),
-          _getItem()
-        ],
-      ),
+      child: widget.oListCuponModel == null
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : ListView.builder(
+              itemCount: widget.oListCuponModel == null
+                  ? 0
+                  : widget.oListCuponModel!.datos!.length > 0
+                      ? widget.oListCuponModel!.datos!.length
+                      : 0,
+              itemBuilder: (_, index) {
+                return _getItem(widget.oListCuponModel!.datos![index]);
+              },
+            ),
     );
   }
 
-  _getItem() {
+  _getItem(DatoCuponLista oDatoCuponLista) {
     return ListTile(
-      leading: Image.asset("./assets/cupon.png"),
+      leading: Image.network(
+        oDatoCuponLista.fotoCupon!,
+        fit: BoxFit.cover,
+        repeat: ImageRepeat.noRepeat,
+        height: 75,
+        width: 75,
+      ),
       title: Text(
-        title_card_cupon,
+        oDatoCuponLista.nombreCupon!,
         style: TextStyle(
             fontWeight: FontWeight.w700,
             color: color_accent,
             fontSize: textBigMedium),
       ),
       subtitle: Text(
-        subtitle_card_cupon,
+        oDatoCuponLista.fechaExpiracion!,
         style: TextStyle(
             fontWeight: FontWeight.w300,
             color: color_accent,
             fontSize: textMediumSmall),
       ),
       onTap: () {
-        Navigator.of(context).pushNamed("/qr_cupon_page");
+        //Navigator.of(context).pushNamed("/qr_cupon_page");
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => QrCuponPage(oDatoCuponLista: oDatoCuponLista)));
       },
     );
+  }
+
+  _initCuponList() async {
+    widget.oListCuponModel = null;
+    setState(() {});
+    widget.oListCuponModel = await ProviderCreateCupon.readCuponClientList();
+    setState(() {});
   }
 }

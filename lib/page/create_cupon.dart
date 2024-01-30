@@ -10,12 +10,13 @@ import 'package:plus_promo/util/dimensiones.dart';
 import 'package:plus_promo/util/secure_data.dart';
 
 import '../model/create_cupon.dart';
+import '../model/cupon_lista/data_cupon_lista.dart';
+import '../model/response_model.dart';
 import '../provider/ProviderStorage.dart';
 import '../util/icons.dart';
 
 class CreateCuponPage extends StatefulWidget {
   XFile? oXFile;
-
   ImagePicker oImagePicker = ImagePicker();
 
   TextEditingController oTextEditingControllerName = TextEditingController();
@@ -23,13 +24,33 @@ class CreateCuponPage extends StatefulWidget {
   TextEditingController oTextEditingControllerFExp = TextEditingController();
   TextEditingController oTextEditingControllerCantCu = TextEditingController();
 
-  CreateCuponPage({super.key});
+  int update_create_cupon;
+  DatoCuponLista? oDatoCuponLista;
+
+  CreateCuponPage(
+      {required this.update_create_cupon, required this.oDatoCuponLista});
 
   @override
   State<CreateCuponPage> createState() => _CreateCuponPageState();
 }
 
 class _CreateCuponPageState extends State<CreateCuponPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.update_create_cupon == 1) {
+      widget.oTextEditingControllerName.text =
+          widget.oDatoCuponLista!.nombreCupon!;
+      widget.oTextEditingControllerPor.text =
+          widget.oDatoCuponLista!.porcetajeDescuento!;
+      widget.oTextEditingControllerFExp.text =
+          widget.oDatoCuponLista!.fechaExpiracion!.toString();
+      widget.oTextEditingControllerCantCu.text =
+          widget.oDatoCuponLista!.cantCupon!.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -109,10 +130,14 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
         ),
         ElevatedButton(
           onPressed: () {
-            _initCreateCupon();
+            widget.update_create_cupon == 0
+                ? _initCreateCupon()
+                : _updateCupon();
           },
           child: Text(
-            "CREAR CUPON",
+            widget.update_create_cupon == 1
+                ? "ACTUALIZAR CUPON"
+                : "CREAR CUPON",
             style: TextStyle(color: color_secondary, fontSize: textMedium),
           ),
           style: ElevatedButton.styleFrom(
@@ -135,12 +160,15 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
             decoration: BoxDecoration(
                 color: color_primary,
                 borderRadius: BorderRadius.all(Radius.circular(100))),
-            child: widget.oXFile == null
-                ? Image.asset("./assets/not_image.jpg", fit: BoxFit.cover)
-                : Image.file(
-                    File(widget.oXFile!.path),
-                    fit: BoxFit.cover,
-                  ),
+            child: widget.oDatoCuponLista != null
+                ? Image.network(widget.oDatoCuponLista!.fotoCupon!,
+                    fit: BoxFit.cover)
+                : widget.oXFile == null
+                    ? Image.asset("./assets/not_image.jpg", fit: BoxFit.cover)
+                    : Image.file(
+                        File(widget.oXFile!.path),
+                        fit: BoxFit.cover,
+                      ),
           ),
           onTap: () {
             _getPickImagen();
@@ -171,7 +199,7 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
       return;
     }
 
-    if (widget.oXFile == null) {
+    if (widget.oXFile == null && widget.update_create_cupon == 0) {
       Fluttertoast.showToast(
           msg: "SELECCIONAR IMAGEN PARA EL CUPON",
           toastLength: Toast.LENGTH_SHORT,
@@ -236,5 +264,34 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
     widget.oTextEditingControllerFExp.clear();
     widget.oTextEditingControllerCantCu.clear();
     setState(() {});
+  }
+
+  _updateCupon() async {
+    widget.oDatoCuponLista!.nombreCupon =
+        widget.oTextEditingControllerName.text;
+    widget.oDatoCuponLista!.porcetajeDescuento =
+        widget.oTextEditingControllerPor.text;
+    widget.oDatoCuponLista!.fechaExpiracion =
+        widget.oTextEditingControllerFExp.text;
+    widget.oDatoCuponLista!.cantCupon =
+        int.tryParse(widget.oTextEditingControllerCantCu.text);
+    ResponseModel oResponseModel =
+        await ProviderCreateCupon.updateCupon(widget.oDatoCuponLista!);
+
+    if (oResponseModel.statusCode == 200) {
+      _clearForm();
+      Navigator.of(context).pop();
+    }
+
+    Fluttertoast.showToast(
+        msg: oResponseModel.statusCode == 200
+            ? "CUPON ACTUALZIADO CON EXITO"
+            : oResponseModel.msm!,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: color_success,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 }

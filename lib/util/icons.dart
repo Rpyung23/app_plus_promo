@@ -1,11 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:plus_promo/util/color.dart';
 
 const icon_home = Icon(Iconsax.home);
 
 const icon_work = Icon(Iconsax.tag);
+
+Icon icon_camera = Icon(
+  Iconsax.camera,
+  color: HexColor("#FFFFFF"),
+);
 
 const icon_profiile = Icon(Iconsax.profile_2user);
 

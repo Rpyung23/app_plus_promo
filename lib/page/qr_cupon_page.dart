@@ -3,11 +3,13 @@ import 'package:flutter/widgets.dart';
 import 'package:plus_promo/util/textos.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../model/cupon_lista/data_cupon_lista.dart';
 import '../util/color.dart';
 import '../util/dimensiones.dart';
 
 class QrCuponPage extends StatefulWidget {
-  const QrCuponPage({super.key});
+  DatoCuponLista? oDatoCuponLista;
+  QrCuponPage({required this.oDatoCuponLista});
 
   @override
   State<QrCuponPage> createState() => _QrCuponPageState();
@@ -35,9 +37,17 @@ class _QrCuponPageState extends State<QrCuponPage> {
   }
 
   _getQR() {
-    return QrImageView(
-        data: '1234567890',
-        backgroundColor: color_secondary,
-        version: QrVersions.auto);
+    return widget.oDatoCuponLista == null
+        ? Text(
+            "CODIGO ERRONEO / VACIO",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 50,
+                color: color_secondary),
+          )
+        : QrImageView(
+            data: widget.oDatoCuponLista!.codeCupon!.toString(),
+            backgroundColor: color_secondary,
+            version: QrVersions.auto);
   }
 }

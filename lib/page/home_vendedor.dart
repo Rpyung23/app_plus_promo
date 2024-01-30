@@ -7,6 +7,7 @@ import '../model/cupon_lista/cupon_lista.dart';
 import '../model/cupon_lista/data_cupon_lista.dart';
 import '../provider/ProviderCupon.dart';
 import '../util/textos.dart';
+import 'create_cupon.dart';
 
 class HomeVendedor extends StatefulWidget {
   ListCuponModel oListCuponModel = ListCuponModel(datos: []);
@@ -31,6 +32,7 @@ class _HomeVendedorState extends State<HomeVendedor> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
+          automaticallyImplyLeading: false,
           title: Text(
             bottom_navigator_inicio,
             style: TextStyle(fontWeight: FontWeight.w700),
@@ -47,13 +49,29 @@ class _HomeVendedorState extends State<HomeVendedor> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            await Navigator.of(context).pushNamed('/create_cupon_page');
-            _getCuponLista();
-          },
-          backgroundColor: color_primary,
-          child: icon_plus_white,
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: marginMediumSmall),
+              child: FloatingActionButton(
+                onPressed: () async {
+                  Navigator.of(context).pushNamed('/qr_scanner_page');
+                },
+                backgroundColor: color_primary,
+                child: icon_camera,
+              ),
+            ),
+            FloatingActionButton(
+              onPressed: () async {
+                await Navigator.of(context).pushNamed('/create_cupon_page');
+                _getCuponLista();
+              },
+              backgroundColor: color_primary,
+              child: icon_plus_white,
+            )
+          ],
         ),
       ),
       onPopInvoked: ((didPop) {}),
@@ -83,12 +101,14 @@ class _HomeVendedorState extends State<HomeVendedor> {
   }
 
   _getBodyHomeVendedor() {
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: widget.oListCuponModel.datos!.length,
-        itemBuilder: (context, index) {
-          return _itemHomeVendedor(widget.oListCuponModel.datos![index]);
-        });
+    return widget.oListCuponModel.datos!.length == 0
+        ? CircularProgressIndicator()
+        : ListView.builder(
+            shrinkWrap: true,
+            itemCount: widget.oListCuponModel.datos!.length,
+            itemBuilder: (context, index) {
+              return _itemHomeVendedor(widget.oListCuponModel.datos![index]);
+            });
   }
 
   _itemHomeVendedor(DatoCuponLista oD) {
@@ -116,8 +136,11 @@ class _HomeVendedorState extends State<HomeVendedor> {
               "DISPONIBLE : " + oD!.cantCupon.toString(),
               style: TextStyle(fontSize: textMediumSmall),
             ),
-            trailing:
-                IconButton(onPressed: () {}, icon: icon_edit_color_primary),
+            trailing: IconButton(
+                onPressed: () {
+                  _updatePage(oD);
+                },
+                icon: icon_edit_color_primary),
           )
         ],
       ),
@@ -125,7 +148,19 @@ class _HomeVendedorState extends State<HomeVendedor> {
   }
 
   _getCuponLista() async {
+    widget.oListCuponModel = ListCuponModel(statusCode: 300, datos: []);
+    ;
+    setState(() {});
     widget.oListCuponModel = await ProviderCreateCupon.readCuponList();
     setState(() {});
+  }
+
+  _updatePage(oD) async {
+    await Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => CreateCuponPage(
+              update_create_cupon: 1,
+              oDatoCuponLista: oD,
+            )));
+    _getCuponLista();
   }
 }

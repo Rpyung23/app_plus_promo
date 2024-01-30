@@ -4,7 +4,7 @@ class DatoCuponLista {
   int? codeCupon;
   String? nombreCupon;
   String? porcetajeDescuento;
-  DateTime? fechaExpiracion;
+  String? fechaExpiracion;
   int? cantCupon;
   String? fotoCupon;
 
@@ -26,9 +26,8 @@ class DatoCuponLista {
         codeCupon: json["code_cupon"],
         nombreCupon: json["nombre_cupon"],
         porcetajeDescuento: json["porcetaje_descuento"],
-        fechaExpiracion: json["fecha_expiracion"] == null
-            ? null
-            : DateTime.parse(json["fecha_expiracion"]),
+        fechaExpiracion:
+            json["fecha_expiracion"] == null ? null : json["fecha_expiracion"],
         cantCupon: json["cant_cupon"],
         fotoCupon: json["foto_cupon"],
       );
@@ -37,8 +36,7 @@ class DatoCuponLista {
         "code_cupon": codeCupon,
         "nombre_cupon": nombreCupon,
         "porcetaje_descuento": porcetajeDescuento,
-        "fecha_expiracion":
-            "${fechaExpiracion!.year.toString().padLeft(4, '0')}-${fechaExpiracion!.month.toString().padLeft(2, '0')}-${fechaExpiracion!.day.toString().padLeft(2, '0')}",
+        "fecha_expiracion": fechaExpiracion,
         "cant_cupon": cantCupon,
         "foto_cupon": fotoCupon,
       };
