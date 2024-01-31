@@ -28,3 +28,7 @@ const url_upload_foto = "${BASE_URL}/upload_foto";
 const url_update_cupon = "${BASE_URL}/update_cupon";
 
 const url_consumir_cupon = "${BASE_URL}/consumir_cupon";
+
+const url_profile_client = "${BASE_URL}/profile_client";
+
+const url_profile_usuario = "${BASE_URL}/profile_usuario";

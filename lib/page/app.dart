@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:plus_promo/page/carrusel_page.dart';
 import 'package:plus_promo/page/home_page.dart';
 import 'package:plus_promo/page/home_vendedor.dart';
+import 'package:plus_promo/page/profile_client_page.dart';
 import 'package:plus_promo/page/qr_cupon_page.dart';
 import 'package:plus_promo/page/registro_page.dart';
 import 'package:plus_promo/page/scanner_qr.dart';
@@ -37,7 +38,8 @@ class AppPage extends StatelessWidget {
               update_create_cupon: 0,
               oDatoCuponLista: null,
             ),
-        '/': (_) => LoginPage()
+        '/': (_) => LoginPage(),
+        '/profile_cliente_page': (_) => ProfileClientPage()
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

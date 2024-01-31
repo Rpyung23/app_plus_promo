@@ -92,10 +92,14 @@ class _HomeVendedorState extends State<HomeVendedor> {
             backgroundColor: color_primary,
             label: Text(title_chip_cajeados,
                 style: TextStyle(color: color_secondary))),
-        Chip(
-            backgroundColor: color_primary,
-            label: Text(title_chip_expirados,
-                style: TextStyle(color: color_secondary)))
+        GestureDetector(
+          child: Chip(
+              backgroundColor: color_primary,
+              label: Text("PERFIL", style: TextStyle(color: color_secondary))),
+          onTap: () {
+            Navigator.of(context).pushNamed('/profile_cliente_page');
+          },
+        )
       ],
     );
   }

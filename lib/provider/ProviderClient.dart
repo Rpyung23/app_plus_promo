@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:plus_promo/model/profileclientmodel.dart';
 import 'package:plus_promo/model/usuario_vendedor/login_usuario_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:plus_promo/util/url.dart';
@@ -19,6 +20,19 @@ class ProviderClient {
       return LoginClienteVendedorModel.fromRawJson(response.body);
     } catch (e) {
       return LoginClienteVendedorModel(statusCode: 400, msm: e.toString());
+    }
+  }
+
+  static Future<ProfileClientModel> profilenClient(usuario) async {
+    try {
+      http.Response response = await http.post(Uri.parse(url_profile_client),
+          encoding: encondingApi,
+          headers: headersApi,
+          body: jsonEncode({'email_client': usuario}));
+
+      return ProfileClientModel.fromRawJson(response.body);
+    } catch (e) {
+      return ProfileClientModel(statusCode: 400, msm: e.toString());
     }
   }
 

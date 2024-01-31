@@ -145,6 +145,7 @@ class _SessionPageState extends State<SessionPage> {
 
     if (oL.statusCode == 200) {
       SecureData.saveStoragePreference(widget.oTextInputControllerUsuario.text);
+      SecureData.saveStorageTipoUserPreference(type);
       type == 'u'
           ? Navigator.of(context).pushNamed("/home_page")
           : Navigator.of(context).pushNamed("/home_vendedor");

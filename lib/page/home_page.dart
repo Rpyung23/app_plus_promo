@@ -16,24 +16,31 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: widget.opc_menu,
-          onTap: (value) {
-            setState(() {
-              widget.opc_menu = value;
-            });
-          },
-          items: const [
-            BottomNavigationBarItem(
-                icon: icon_home, label: bottom_navigator_inicio),
-            BottomNavigationBarItem(
-                icon: icon_work, label: bottom_navigator_cupones),
-            BottomNavigationBarItem(
-                icon: icon_profiile, label: bottom_navigator_perfil)
-          ],
-        ),
-        body: _getBodyHomePage());
+    return PopScope(
+      child: Scaffold(
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: widget.opc_menu,
+            onTap: (value) {
+              setState(() {
+                if (value == 2) {
+                  Navigator.of(context).pushNamed('/profile_cliente_page');
+                } else {
+                  widget.opc_menu = value;
+                }
+              });
+            },
+            items: const [
+              BottomNavigationBarItem(
+                  icon: icon_home, label: bottom_navigator_inicio),
+              BottomNavigationBarItem(
+                  icon: icon_work, label: bottom_navigator_cupones),
+              BottomNavigationBarItem(
+                  icon: icon_profiile, label: bottom_navigator_perfil)
+            ],
+          ),
+          body: _getBodyHomePage()),
+      canPop: false,
+    );
   }
 
   _getBodyHomePage() {

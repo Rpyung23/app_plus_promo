@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plus_promo/page/session_page.dart';
 import 'package:plus_promo/util/dimensiones.dart';
+import 'package:plus_promo/util/secure_data.dart';
 
 import '../util/color.dart';
 import '../util/textos.dart';
@@ -14,27 +15,37 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkLogin();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Stack(
-      children: [
-        _getBackground(),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            margin: EdgeInsets.all(marginSmallSmall),
-            child: Card(
-              color: color_secondary,
-              surfaceTintColor: color_secondary,
-              child: Container(
-                child: _ItemTypeUser(),
-                padding: EdgeInsets.all(marginSmall),
+    return PopScope(
+      child: SafeArea(
+          child: Stack(
+        children: [
+          _getBackground(),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              margin: EdgeInsets.all(marginSmallSmall),
+              child: Card(
+                color: color_secondary,
+                surfaceTintColor: color_secondary,
+                child: Container(
+                  child: _ItemTypeUser(),
+                  padding: EdgeInsets.all(marginSmall),
+                ),
               ),
             ),
-          ),
-        )
-      ],
-    ));
+          )
+        ],
+      )),
+      canPop: false,
+    );
   }
 
   _getBackground() {
@@ -79,5 +90,17 @@ class _LoginPageState extends State<LoginPage> {
                 minimumSize: Size(double.infinity, altoMedium)))
       ],
     );
+  }
+
+  checkLogin() async {
+    String? tipo = await SecureData.getStorageTipoUserPreference();
+    String? email = await SecureData.getStoragePreference();
+    if (email != null) {
+      if (tipo != null) {
+        tipo == 'u'
+            ? Navigator.of(context).pushNamed("/home_page")
+            : Navigator.of(context).pushNamed("/home_vendedor");
+      }
+    }
   }
 }

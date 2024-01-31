@@ -24,4 +24,21 @@ class SecureData {
       return null;
     }
   }
+
+  static saveStorageTipoUserPreference(tipo) async {
+    try {
+      await storage.write(key: tipo_usuario, value: tipo);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static getStorageTipoUserPreference() async {
+    try {
+      return await storage.read(key: tipo_usuario);
+    } catch (e) {
+      return null;
+    }
+  }
 }
