@@ -6,6 +6,7 @@ import '../model/cupon_lista/data_cupon_lista.dart';
 import '../provider/ProviderCupon.dart';
 import '../util/color.dart';
 import '../util/dimensiones.dart';
+import '../util/secure_data.dart';
 import '../util/textos.dart';
 import 'qr_cupon_page.dart';
 
@@ -84,8 +85,8 @@ class _CuponesListPageState extends State<CuponesListPage> {
       ),
       onTap: () {
         //Navigator.of(context).pushNamed("/qr_cupon_page");
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => QrCuponPage(oDatoCuponLista: oDatoCuponLista)));
+
+        _showNavigatorCuponQr(oDatoCuponLista);
       },
     );
   }
@@ -95,5 +96,14 @@ class _CuponesListPageState extends State<CuponesListPage> {
     setState(() {});
     widget.oListCuponModel = await ProviderCreateCupon.readCuponClientList();
     setState(() {});
+  }
+
+  _showNavigatorCuponQr(DatoCuponLista oDatoCuponLista_) async {
+    String user = await SecureData.getStoragePreference();
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => QrCuponPage(
+              oDatoCuponLista: oDatoCuponLista_,
+              email_user: user,
+            )));
   }
 }

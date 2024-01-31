@@ -26,7 +26,10 @@ class AppPage extends StatelessWidget {
         '/home_page': (_) => HomePage(),
         '/categoria_cupon': (_) => CategoriaCuponPage(),
         '/cupones_list': (_) => CuponesListPage(),
-        '/qr_cupon_page': (_) => QrCuponPage(oDatoCuponLista: null),
+        '/qr_cupon_page': (_) => QrCuponPage(
+              oDatoCuponLista: null,
+              email_user: null,
+            ),
         '/qr_scanner_page': (_) => ScannerQR(),
         '/home_vendedor': (_) => HomeVendedor(),
         '/session_page': (_) => SessionPage(),

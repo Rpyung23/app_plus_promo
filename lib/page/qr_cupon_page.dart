@@ -1,15 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:plus_promo/util/textos.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../model/CuponQr_model.dart';
 import '../model/cupon_lista/data_cupon_lista.dart';
 import '../util/color.dart';
 import '../util/dimensiones.dart';
 
 class QrCuponPage extends StatefulWidget {
+  String? email_user;
+
   DatoCuponLista? oDatoCuponLista;
-  QrCuponPage({required this.oDatoCuponLista});
+  QrCuponPage({required this.oDatoCuponLista, required this.email_user});
 
   @override
   State<QrCuponPage> createState() => _QrCuponPageState();
@@ -46,7 +51,10 @@ class _QrCuponPageState extends State<QrCuponPage> {
                 color: color_secondary),
           )
         : QrImageView(
-            data: widget.oDatoCuponLista!.codeCupon!.toString(),
+            data: CuponQrModel(
+                    cupon: widget.oDatoCuponLista!.codeCupon!,
+                    user: widget.email_user)
+                .toRawJson(),
             backgroundColor: color_secondary,
             version: QrVersions.auto);
   }

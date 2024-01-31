@@ -26,3 +26,5 @@ const url_list_client_cupon = "${BASE_URL}/read_all_client_cupon";
 const url_upload_foto = "${BASE_URL}/upload_foto";
 
 const url_update_cupon = "${BASE_URL}/update_cupon";
+
+const url_consumir_cupon = "${BASE_URL}/consumir_cupon";

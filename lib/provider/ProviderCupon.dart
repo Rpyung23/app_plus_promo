@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:plus_promo/model/response_model.dart';
+import 'package:plus_promo/provider/ProviderStorage.dart';
 import 'package:plus_promo/util/secure_data.dart';
 
 import '../model/create_cupon.dart';
@@ -79,6 +80,18 @@ class ProviderCreateCupon {
     } catch (e) {
       print(e.toString());
       return ListCuponModel(statusCode: 400, datos: [], msm: e.toString());
+    }
+  }
+
+  static Future<ResponseModel> consumirCuponClient(usuario, cupon) async {
+    try {
+      http.Response oR = await http.put(Uri.parse(url_consumir_cupon),
+          headers: headersApi,
+          encoding: encondingApi,
+          body: jsonEncode({"user": usuario, "cupon": cupon}));
+      return ResponseModel.fromRawJson(oR.body);
+    } catch (e) {
+      return ResponseModel(statusCode: 200, msm: e.toString());
     }
   }
 }
