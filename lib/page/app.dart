@@ -11,6 +11,7 @@ import 'create_cupon.dart';
 import 'cupones_list_page.dart';
 import 'login_page.dart';
 import 'session_page.dart';
+import 'stadistics_page.dart';
 
 class AppPage extends StatelessWidget {
   const AppPage({super.key});
@@ -39,7 +40,8 @@ class AppPage extends StatelessWidget {
               oDatoCuponLista: null,
             ),
         '/': (_) => LoginPage(),
-        '/profile_cliente_page': (_) => ProfileClientPage()
+        '/profile_cliente_page': (_) => ProfileClientPage(),
+        '/statistical_page': (_) => StaticsPage()
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

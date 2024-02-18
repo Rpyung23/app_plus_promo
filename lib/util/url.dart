@@ -9,6 +9,8 @@ const headersApi = {
 
 final encondingApi = Encoding.getByName('utf-8');
 
+const url_static = "${BASE_URL}/static";
+
 const url_login_client = "${BASE_URL}/login_client";
 
 const url_login_vendedor = "${BASE_URL}/login_admin";

@@ -88,10 +88,15 @@ class _HomeVendedorState extends State<HomeVendedor> {
               title_chip_cupon,
               style: TextStyle(color: color_secondary),
             )),
-        Chip(
-            backgroundColor: color_primary,
-            label: Text(title_chip_cajeados,
-                style: TextStyle(color: color_secondary))),
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context).pushNamed("/statistical_page");
+          },
+          child: Chip(
+              backgroundColor: color_primary,
+              label: Text(title_chip_cajeados,
+                  style: TextStyle(color: color_secondary))),
+        ),
         GestureDetector(
           child: Chip(
               backgroundColor: color_primary,

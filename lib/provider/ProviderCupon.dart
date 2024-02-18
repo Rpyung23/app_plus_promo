@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:plus_promo/model/response_model.dart';
-import 'package:plus_promo/provider/ProviderStorage.dart';
 import 'package:plus_promo/util/secure_data.dart';
 
 import '../model/create_cupon.dart';
@@ -9,6 +8,7 @@ import 'package:http/http.dart' as http;
 
 import '../model/cupon_lista/cupon_lista.dart';
 import '../model/cupon_lista/data_cupon_lista.dart';
+import '../model/static_cupon.dart';
 import '../util/url.dart';
 
 class ProviderCreateCupon {
@@ -92,6 +92,21 @@ class ProviderCreateCupon {
       return ResponseModel.fromRawJson(oR.body);
     } catch (e) {
       return ResponseModel(statusCode: 200, msm: e.toString());
+    }
+  }
+
+  static Future<ModelStaticCupon> consumirPanelCupon() async {
+    try {
+      String? code = await SecureData.getStoragePreference();
+
+      http.Response oR = await http.post(Uri.parse(url_static),
+          headers: headersApi,
+          encoding: encondingApi,
+          body: jsonEncode({"email": code}));
+      print(oR.body);
+      return ModelStaticCupon.fromRawJson(oR.body);
+    } catch (e) {
+      return ModelStaticCupon(statusCode: 400, msm: e.toString());
     }
   }
 }
