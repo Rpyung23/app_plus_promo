@@ -3,10 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:plus_promo/util/color.dart';
 import 'package:plus_promo/util/dimensiones.dart';
-
+import 'package:syncfusion_flutter_charts/charts.dart';
 import '../model/static_cupon.dart';
 import '../provider/ProviderCupon.dart';
 import '../util/textos.dart';
+
+class ChartData {
+  ChartData(this.x, this.y, this.color);
+  final String x;
+  final double y;
+  final Color color;
+}
 
 class StaticsPage extends StatefulWidget {
   ModelStaticCupon? oModelStaticCupon;
@@ -54,7 +61,14 @@ class _StaticsPageState extends State<StaticsPage> {
         : ListView(
             shrinkWrap: false,
             children: [
+              Card(child: _getDiagrama1()),
+              SizedBox(
+                height: marginSmallSmall,
+              ),
               Card(
+                child: _getDiagrama2(),
+              ),
+              /*Card(
                 child: Container(
                   padding: EdgeInsets.all(marginSmallSmall),
                   height: 500,
@@ -71,7 +85,7 @@ class _StaticsPageState extends State<StaticsPage> {
                 ),
               ),
               SizedBox(
-                height: marginMediumSmall,
+                height: marginSmallSmall,
               ),
               Card(
                 child: Container(
@@ -88,6 +102,9 @@ class _StaticsPageState extends State<StaticsPage> {
                     swapAnimationCurve: Curves.bounceIn,
                   ),
                 ),
+              ),*/
+              SizedBox(
+                height: marginSmallSmall,
               )
             ],
           );
@@ -123,5 +140,61 @@ class _StaticsPageState extends State<StaticsPage> {
           fontSize: 16.0);
     }
     setState(() {});
+  }
+
+  _getDiagrama1() {
+    if (widget.oModelStaticCupon == null) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    List<ChartData> chartData = [
+      ChartData('NO CANJEADOS', widget.oModelStaticCupon!.disponibleCuponVn!,
+          color_primary),
+      ChartData(
+          'EXPIRADOS', widget.oModelStaticCupon!.cantCuponVn!, color_warning),
+    ];
+
+    return SfCircularChart(
+        tooltipBehavior: TooltipBehavior(enable: true),
+        title: ChartTitle(text: 'EXPIRADOS / NO CANJEADOS'),
+        legend: Legend(isVisible: true),
+        series: <CircularSeries>[
+          // Render pie chart
+          PieSeries<ChartData, String>(
+              dataSource: chartData,
+              pointColorMapper: (ChartData data, _) => data.color,
+              xValueMapper: (ChartData data, _) => data.x,
+              yValueMapper: (ChartData data, _) => data.y,
+              dataLabelSettings: DataLabelSettings(isVisible: true))
+        ]);
+  }
+
+  _getDiagrama2() {
+    if (widget.oModelStaticCupon == null) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    List<ChartData> chartData = [
+      ChartData('DISPONIBLES', widget.oModelStaticCupon!.disponibleCuponOcp!,
+          color_success),
+      ChartData(
+          'CANJEADOS', widget.oModelStaticCupon!.cantCuponOcp!, color_danger),
+    ];
+
+    return SfCircularChart(
+        tooltipBehavior: TooltipBehavior(enable: true),
+        title: ChartTitle(text: 'EXPIRADOS / NO CANJEADOS'),
+        legend: Legend(isVisible: true),
+        series: <CircularSeries>[
+          // Render pie chart
+          PieSeries<ChartData, String>(
+              dataSource: chartData,
+              pointColorMapper: (ChartData data, _) => data.color,
+              xValueMapper: (ChartData data, _) => data.x,
+              yValueMapper: (ChartData data, _) => data.y,
+              dataLabelSettings: DataLabelSettings(isVisible: true))
+        ]);
   }
 }

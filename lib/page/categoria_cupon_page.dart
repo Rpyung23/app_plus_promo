@@ -1,19 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:plus_promo/page/cupones_list_page.dart';
 
+import '../model/categorie/categorie_model.dart';
+import '../model/categorie/data_categorie_model.dart';
+import '../provider/ProviderCategorie.dart';
 import '../util/color.dart';
 import '../util/dimensiones.dart';
 import '../util/textos.dart';
 
 class CategoriaCuponPage extends StatefulWidget {
-  const CategoriaCuponPage({super.key});
+  List<DatoCategorieModel> oDatoCategorieList = [];
+
+  CategoriaCuponPage({super.key});
 
   @override
   State<CategoriaCuponPage> createState() => _CategoriaCuponPageState();
 }
 
 class _CategoriaCuponPageState extends State<CategoriaCuponPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _initApiCategoria();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -141,28 +154,40 @@ class _CategoriaCuponPageState extends State<CategoriaCuponPage> {
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: textBig),
           ),
           SizedBox(height: marginSmall),
-          ListView(
-            shrinkWrap: true,
-            children: [
-              _getCategorias(),
-              _getCategorias(),
-              _getCategorias(),
-              _getCategorias(),
-              _getCategorias(),
-              _getCategorias(),
-              _getCategorias(),
-              _getCategorias(),
-              _getCategorias(),
-              _getCategorias()
-            ],
+          Container(
+            height: 400,
+            child: ListView.builder(
+              itemCount: widget.oDatoCategorieList.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return _getCategorias(widget.oDatoCategorieList[index]);
+              },
+            ),
           )
         ],
       ),
     );
   }
 
-  Widget _getCategorias() {
-    return Card(
+  Widget _getCategorias(DatoCategorieModel oD) {
+    return Column(
+      children: [
+        ListTile(
+          leading: Icon(Iconsax.tag),
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => CuponesListPage(
+                      id_categoria: oD.idCategoria,
+                    )));
+          },
+          title: Text(
+            oD.detalleCategoria!,
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
+        ),
+        Divider()
+      ],
+    ); /*, Card(
         child: Container(
       padding: EdgeInsets.all(marginSmallSmall),
       child: Row(
@@ -171,25 +196,31 @@ class _CategoriaCuponPageState extends State<CategoriaCuponPage> {
           SizedBox(
             width: marginSmallSmall,
           ),
-          const Expanded(
+          Expanded(
               child: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                card_categoria,
+                oD.detalleCategoria!,
                 textAlign: TextAlign.left,
                 style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              ) /*,
               Text(
                 card_detalle_categoria,
                 textAlign: TextAlign.left,
                 overflow: TextOverflow.ellipsis,
-              )
+              )*/
             ],
           ))
         ],
       ),
-    ));
+    ));*/
+  }
+
+  _initApiCategoria() async {
+    ModelCategorie oM = await ProviderCategorie.readCategoriaModel();
+    widget.oDatoCategorieList = oM!.datos!;
+    setState(() {});
   }
 }

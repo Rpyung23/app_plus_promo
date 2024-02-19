@@ -9,9 +9,12 @@ import 'package:plus_promo/util/color.dart';
 import 'package:plus_promo/util/dimensiones.dart';
 import 'package:plus_promo/util/secure_data.dart';
 
+import '../model/categorie/categorie_model.dart';
+import '../model/categorie/data_categorie_model.dart';
 import '../model/create_cupon.dart';
 import '../model/cupon_lista/data_cupon_lista.dart';
 import '../model/response_model.dart';
+import '../provider/ProviderCategorie.dart';
 import '../provider/ProviderStorage.dart';
 import '../util/icons.dart';
 
@@ -23,6 +26,8 @@ class CreateCuponPage extends StatefulWidget {
   TextEditingController oTextEditingControllerPor = TextEditingController();
   TextEditingController oTextEditingControllerFExp = TextEditingController();
   TextEditingController oTextEditingControllerCantCu = TextEditingController();
+  List<DatoCategorieModel> oDatoCategorieModel = [];
+  DatoCategorieModel? oDatoCategorieSelectModel;
 
   int update_create_cupon;
   DatoCuponLista? oDatoCuponLista;
@@ -49,6 +54,7 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
       widget.oTextEditingControllerCantCu.text =
           widget.oDatoCuponLista!.cantCupon!.toString();
     }
+    _initApiCategoria();
   }
 
   @override
@@ -76,6 +82,21 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
         _getPictureImage(),
         SizedBox(
           height: marginMedium,
+        ),
+        DropdownButtonFormField(
+          items: _getItemCategorias(),
+          onChanged: (item) {
+            widget.oDatoCategorieSelectModel = item as DatoCategorieModel?;
+          },
+          decoration: InputDecoration(
+              hintText: "Seleccionar Categoría",
+              prefixIcon: icon_task,
+              border: OutlineInputBorder(),
+              enabledBorder: OutlineInputBorder(),
+              focusedBorder: OutlineInputBorder()),
+        ),
+        SizedBox(
+          height: marginSmall,
         ),
         TextFormField(
           controller: widget.oTextEditingControllerName,
@@ -143,6 +164,9 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
           style: ElevatedButton.styleFrom(
               backgroundColor: color_primary,
               minimumSize: Size(double.infinity, altoMedium)),
+        ),
+        SizedBox(
+          height: marginSmall,
         )
       ],
     );
@@ -233,7 +257,8 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
         widget.oTextEditingControllerPor.text,
         widget.oTextEditingControllerFExp.text,
         widget.oTextEditingControllerCantCu.text,
-        oStorageModel.downloadUrl);
+        oStorageModel.downloadUrl,
+        widget.oDatoCategorieSelectModel!.idCategoria);
 
     if (oCreateCuponModel.statusCode == 200) {
       Fluttertoast.showToast(
@@ -258,6 +283,7 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
   }
 
   _clearForm() {
+    widget.oDatoCategorieSelectModel = null;
     widget.oXFile = null;
     widget.oTextEditingControllerName.clear();
     widget.oTextEditingControllerPor.clear();
@@ -275,8 +301,8 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
         widget.oTextEditingControllerFExp.text;
     widget.oDatoCuponLista!.cantCupon =
         int.tryParse(widget.oTextEditingControllerCantCu.text);
-    ResponseModel oResponseModel =
-        await ProviderCreateCupon.updateCupon(widget.oDatoCuponLista!);
+    ResponseModel oResponseModel = await ProviderCreateCupon.updateCupon(
+        widget.oDatoCuponLista!, widget.oDatoCategorieSelectModel!.idCategoria);
 
     if (oResponseModel.statusCode == 200) {
       _clearForm();
@@ -293,5 +319,27 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
         backgroundColor: color_success,
         textColor: Colors.white,
         fontSize: 16.0);
+  }
+
+  _initApiCategoria() async {
+    ModelCategorie oM = await ProviderCategorie.readCategoriaModel();
+    widget.oDatoCategorieModel = oM!.datos!;
+    setState(() {});
+  }
+
+  _getItemCategorias() {
+    List<DropdownMenuItem<DatoCategorieModel>> oL = [];
+    try {
+      for (var i = 0; i < widget.oDatoCategorieModel.length; i++) {
+        oL.add(DropdownMenuItem(
+            value: widget.oDatoCategorieModel[i],
+            child: Text(widget.oDatoCategorieModel[i].detalleCategoria!)));
+      }
+      return oL;
+    } catch (e) {
+      print("CARGANDO ITEMS CATEGORIA.....");
+      print(e.toString());
+    }
+    setState(() {});
   }
 }

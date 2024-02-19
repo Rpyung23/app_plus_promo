@@ -29,50 +29,31 @@ class _HomeVendedorState extends State<HomeVendedor> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          title: Text(
-            bottom_navigator_inicio,
-            style: TextStyle(fontWeight: FontWeight.w700),
-          ),
-        ),
-        body: Container(
-          child: Column(
-            children: [
-              _getChip(),
-              SizedBox(
-                height: marginSmallSmall,
-              ),
-              _getBodyHomeVendedor()
-            ],
-          ),
-        ),
-        floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Container(
-              margin: EdgeInsets.only(left: marginMediumSmall),
-              child: FloatingActionButton(
-                onPressed: () async {
-                  Navigator.of(context).pushNamed('/qr_scanner_page');
-                },
-                backgroundColor: color_primary,
-                child: icon_camera,
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              automaticallyImplyLeading: false,
+              title: Text(
+                bottom_navigator_inicio,
+                style: TextStyle(fontWeight: FontWeight.w700),
               ),
             ),
-            FloatingActionButton(
-              onPressed: () async {
-                await Navigator.of(context).pushNamed('/create_cupon_page');
-                _getCuponLista();
-              },
-              backgroundColor: color_primary,
-              child: icon_plus_white,
-            )
-          ],
-        ),
+            body: Container(
+              child: Column(
+                children: [
+                  _getChip(),
+                  SizedBox(
+                    height: marginSmallSmall,
+                  ),
+                  _getBodyHomeVendedor()
+                ],
+              ),
+            ),
+          ),
+          _getFloating()
+        ],
       ),
       onPopInvoked: ((didPop) {}),
     );
@@ -112,12 +93,16 @@ class _HomeVendedorState extends State<HomeVendedor> {
   _getBodyHomeVendedor() {
     return widget.oListCuponModel.datos!.length == 0
         ? CircularProgressIndicator()
-        : ListView.builder(
-            shrinkWrap: true,
-            itemCount: widget.oListCuponModel.datos!.length,
-            itemBuilder: (context, index) {
-              return _itemHomeVendedor(widget.oListCuponModel.datos![index]);
-            });
+        : Container(
+            padding: EdgeInsets.all(marginSmallSmall),
+            child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: widget.oListCuponModel.datos!.length,
+                itemBuilder: (context, index) {
+                  return _itemHomeVendedor(
+                      widget.oListCuponModel.datos![index]);
+                }),
+          );
   }
 
   _itemHomeVendedor(DatoCuponLista oD) {
@@ -171,5 +156,44 @@ class _HomeVendedorState extends State<HomeVendedor> {
               oDatoCuponLista: oD,
             )));
     _getCuponLista();
+  }
+
+  _getFloating() {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pushNamed('/qr_scanner_page');
+              },
+              child: icon_camera,
+              style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.all(17),
+                  shape: CircleBorder(),
+                  backgroundColor: color_primary),
+            ),
+            SizedBox(
+              height: marginSmallSmall,
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                await Navigator.of(context).pushNamed('/create_cupon_page');
+                _getCuponLista();
+              },
+              style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.all(17),
+                  shape: CircleBorder(),
+                  backgroundColor: color_primary),
+              child: icon_plus_white,
+            )
+          ],
+        ),
+        margin: EdgeInsets.only(bottom: marginSmall, right: marginSmall),
+      ),
+    );
   }
 }

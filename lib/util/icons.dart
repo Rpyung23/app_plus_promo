@@ -4,6 +4,8 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:plus_promo/util/color.dart';
 
+const icon_task = Icon(Iconsax.task);
+
 const icon_home = Icon(Iconsax.home);
 
 const icon_work = Icon(Iconsax.tag);

@@ -12,3 +12,5 @@ HexColor color_danger = HexColor("#dc3545");
 HexColor color_success = HexColor("#28a745");
 
 HexColor color_info = HexColor("#17a2b8");
+
+HexColor color_warning = HexColor("#ffc107");

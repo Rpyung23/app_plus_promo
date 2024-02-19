@@ -11,8 +11,9 @@ import '../util/textos.dart';
 import 'qr_cupon_page.dart';
 
 class CuponesListPage extends StatefulWidget {
+  int? id_categoria;
   ListCuponModel? oListCuponModel;
-  CuponesListPage({super.key});
+  CuponesListPage({this.id_categoria});
 
   @override
   State<CuponesListPage> createState() => _CuponesListPageState();
@@ -61,40 +62,51 @@ class _CuponesListPageState extends State<CuponesListPage> {
   }
 
   _getItem(DatoCuponLista oDatoCuponLista) {
-    return ListTile(
-      leading: Image.network(
-        oDatoCuponLista.fotoCupon!,
-        fit: BoxFit.cover,
-        repeat: ImageRepeat.noRepeat,
-        height: 75,
-        width: 75,
-      ),
-      title: Text(
-        oDatoCuponLista.nombreCupon!,
-        style: TextStyle(
-            fontWeight: FontWeight.w700,
-            color: color_accent,
-            fontSize: textBigMedium),
-      ),
-      subtitle: Text(
-        oDatoCuponLista.fechaExpiracion!,
-        style: TextStyle(
-            fontWeight: FontWeight.w300,
-            color: color_accent,
-            fontSize: textMediumSmall),
-      ),
-      onTap: () {
-        //Navigator.of(context).pushNamed("/qr_cupon_page");
+    return Column(
+      children: [
+        ListTile(
+          leading: Image.network(
+            oDatoCuponLista.fotoCupon!,
+            fit: BoxFit.cover,
+            repeat: ImageRepeat.noRepeat,
+            height: 75,
+            width: 75,
+          ),
+          title: Text(
+            oDatoCuponLista.nombreCupon!,
+            style: TextStyle(
+                fontWeight: FontWeight.w700,
+                color: color_accent,
+                fontSize: textBigMedium),
+          ),
+          subtitle: Text(
+            oDatoCuponLista.fechaExpiracion!,
+            style: TextStyle(
+                fontWeight: FontWeight.w300,
+                color: color_accent,
+                fontSize: textMediumSmall),
+          ),
+          onTap: () {
+            //Navigator.of(context).pushNamed("/qr_cupon_page");
 
-        _showNavigatorCuponQr(oDatoCuponLista);
-      },
+            _showNavigatorCuponQr(oDatoCuponLista);
+          },
+        ),
+        Divider()
+      ],
     );
   }
 
   _initCuponList() async {
     widget.oListCuponModel = null;
     setState(() {});
-    widget.oListCuponModel = await ProviderCreateCupon.readCuponClientList();
+    if (widget.id_categoria == null) {
+      widget.oListCuponModel = await ProviderCreateCupon.readCuponClientList();
+    } else {
+      widget.oListCuponModel =
+          await ProviderCreateCupon.readCuponClientCategoryList(
+              widget.id_categoria);
+    }
     setState(() {});
   }
 

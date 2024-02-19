@@ -48,7 +48,9 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return CategoriaCuponPage();
       case 1:
-        return CuponesListPage();
+        return CuponesListPage(
+          id_categoria: null,
+        );
       default:
         return CategoriaCuponPage();
     }

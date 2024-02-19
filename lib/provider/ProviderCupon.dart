@@ -31,7 +31,7 @@ class ProviderCreateCupon {
   }
 
   static Future<CreateCuponModel> createCupon(
-      email, name, porcent, f_exp, cant, foto) async {
+      email, name, porcent, f_exp, cant, foto, idCategoria) async {
     try {
       http.Response oResponse = await http.post(Uri.parse(url_create_cupon),
           body: jsonEncode({
@@ -40,7 +40,8 @@ class ProviderCreateCupon {
             "porcent": porcent,
             "f_exp": f_exp,
             "cant": cant,
-            "foto": foto
+            "foto": foto,
+            "categoria": idCategoria
           }),
           headers: headersApi,
           encoding: encondingApi);
@@ -51,7 +52,7 @@ class ProviderCreateCupon {
   }
 
   static Future<ResponseModel> updateCupon(
-      DatoCuponLista oDatoCuponLista) async {
+      DatoCuponLista oDatoCuponLista, categoria) async {
     try {
       http.Response oR = await http.put(Uri.parse(url_update_cupon),
           headers: headersApi,
@@ -61,7 +62,8 @@ class ProviderCreateCupon {
             "nombre_cupon": oDatoCuponLista.nombreCupon,
             "porcetaje_descuento": oDatoCuponLista.porcetajeDescuento,
             "fecha_expiracion": oDatoCuponLista.fechaExpiracion,
-            "cant_cupon": oDatoCuponLista.cantCupon
+            "cant_cupon": oDatoCuponLista.cantCupon,
+            "categoria": categoria
           }));
       return ResponseModel.fromRawJson(oR.body);
     } catch (e) {
@@ -107,6 +109,23 @@ class ProviderCreateCupon {
       return ModelStaticCupon.fromRawJson(oR.body);
     } catch (e) {
       return ModelStaticCupon(statusCode: 400, msm: e.toString());
+    }
+  }
+
+  static Future<ListCuponModel> readCuponClientCategoryList(categoria) async {
+    try {
+      //var email = await SecureData.getStoragePreference();
+
+      http.Response oResponse = await http.post(
+          Uri.parse(url_list_client_cupon_categoria),
+          body: jsonEncode({"categoria": categoria}),
+          headers: headersApi,
+          encoding: encondingApi);
+      print(oResponse.body);
+      return ListCuponModel.fromRawJson(oResponse.body);
+    } catch (e) {
+      print(e.toString());
+      return ListCuponModel(statusCode: 400, datos: [], msm: e.toString());
     }
   }
 }
