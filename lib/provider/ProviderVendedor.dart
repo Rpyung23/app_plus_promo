@@ -49,6 +49,8 @@ class ProviderVendedor {
           headers: headersApi,
           body: jsonEncode({'email_client': usuario}));
 
+      print(response.body);
+
       return ProfileClientModel.fromRawJson(response.body);
     } catch (e) {
       return ProfileClientModel(statusCode: 400, msm: e.toString());

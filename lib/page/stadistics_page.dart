@@ -2,10 +2,15 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:plus_promo/util/color.dart';
+import 'package:intl/intl.dart';
 import 'package:plus_promo/util/dimensiones.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import '../model/profileclientmodel.dart';
 import '../model/static_cupon.dart';
+import '../model/usuario_vendedor/data_login_usuario_model.dart';
 import '../provider/ProviderCupon.dart';
+import '../provider/ProviderVendedor.dart';
+import '../util/secure_data.dart';
 import '../util/textos.dart';
 
 class ChartData {
@@ -18,6 +23,8 @@ class ChartData {
 class StaticsPage extends StatefulWidget {
   ModelStaticCupon? oModelStaticCupon;
 
+  ProfileClientModel? oProfileClientModel;
+
   StaticsPage({super.key});
 
   @override
@@ -29,6 +36,7 @@ class _StaticsPageState extends State<StaticsPage> {
   void initState() {
     // TODO: implement initState
     _consumirApi();
+    _initReadDataVendedor();
     super.initState();
   }
 
@@ -53,6 +61,13 @@ class _StaticsPageState extends State<StaticsPage> {
     );
   }
 
+  obtenerFechaYHoraActual() {
+    // Obtener la fecha y hora actual
+    DateTime now = DateTime.now();
+    // Formatear la fecha y la hora
+    return DateFormat('yyyy-MM-dd HH:mm').format(now);
+  }
+
   _getBody() {
     return widget.oModelStaticCupon == null
         ? Center(
@@ -61,12 +76,82 @@ class _StaticsPageState extends State<StaticsPage> {
         : ListView(
             shrinkWrap: false,
             children: [
-              Card(child: _getDiagrama1()),
+              Card(
+                child: Container(
+                  padding: EdgeInsets.all(marginSmallSmall),
+                  child: Row(
+                    children: [
+                      widget.oProfileClientModel == null
+                          ? CircleAvatar(
+                              child: Text("."),
+                            )
+                          : Container(
+                              height: 70,
+                              width: 70,
+                              clipBehavior: Clip.antiAlias,
+                              child: Image.network(
+                                widget.oProfileClientModel!.datos!.fotoCliente!,
+                                fit: BoxFit.cover,
+                              ),
+                              decoration: BoxDecoration(shape: BoxShape.circle),
+                            ),
+                      SizedBox(
+                        width: marginSmallSmall,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.oProfileClientModel == null
+                                ? "SIN NOMBRE"
+                                : widget
+                                    .oProfileClientModel!.datos!.nameCliente!,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: textMedium),
+                          ),
+                          SizedBox(
+                            height: 1,
+                          ),
+                          Text(widget.oProfileClientModel == null
+                              ? "SIN EMAIL"
+                              : widget.oProfileClientModel!.datos!.uidCliente!)
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
               SizedBox(
                 height: marginSmallSmall,
               ),
               Card(
-                child: _getDiagrama2(),
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  _getDiagrama1(),
+                  Container(
+                    child: Text("Fecha Reporte : " + obtenerFechaYHoraActual()),
+                    padding: EdgeInsets.all(marginSmallSmall),
+                  )
+                ],
+              )),
+              SizedBox(
+                height: marginSmallSmall,
+              ),
+              Card(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    _getDiagrama2(),
+                    Container(
+                        child: Text(
+                            "Fecha Reporte : " + obtenerFechaYHoraActual()),
+                        padding: EdgeInsets.all(marginSmallSmall))
+                  ],
+                ),
               ),
               /*Card(
                 child: Container(
@@ -157,16 +242,23 @@ class _StaticsPageState extends State<StaticsPage> {
 
     return SfCircularChart(
         tooltipBehavior: TooltipBehavior(enable: true),
-        title: ChartTitle(text: 'EXPIRADOS / NO CANJEADOS'),
+        title: ChartTitle(
+            text: 'EXPIRADOS / NO CANJEADOS',
+            textStyle: TextStyle(fontWeight: FontWeight.bold)),
         legend: Legend(isVisible: true),
         series: <CircularSeries>[
           // Render pie chart
           PieSeries<ChartData, String>(
               dataSource: chartData,
+              explode: true,
+              explodeIndex: 0,
               pointColorMapper: (ChartData data, _) => data.color,
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y,
-              dataLabelSettings: DataLabelSettings(isVisible: true))
+              dataLabelSettings: DataLabelSettings(
+                  isVisible: true,
+                  textStyle: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: textMedium)))
         ]);
   }
 
@@ -185,16 +277,30 @@ class _StaticsPageState extends State<StaticsPage> {
 
     return SfCircularChart(
         tooltipBehavior: TooltipBehavior(enable: true),
-        title: ChartTitle(text: 'EXPIRADOS / NO CANJEADOS'),
+        title: ChartTitle(
+            text: 'EXPIRADOS / NO CANJEADOS',
+            textStyle: TextStyle(fontWeight: FontWeight.bold)),
         legend: Legend(isVisible: true),
         series: <CircularSeries>[
           // Render pie chart
           PieSeries<ChartData, String>(
               dataSource: chartData,
+              explode: true,
+              explodeIndex: 0,
               pointColorMapper: (ChartData data, _) => data.color,
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y,
-              dataLabelSettings: DataLabelSettings(isVisible: true))
+              dataLabelSettings: DataLabelSettings(
+                  isVisible: true,
+                  textStyle: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: textMedium)))
         ]);
+  }
+
+  _initReadDataVendedor() async {
+    //widget.oDataLoginClienteVendedorModel =
+    String email = await SecureData.getStoragePreference();
+    widget.oProfileClientModel = await ProviderVendedor.profilenVendedor(email);
+    setState(() {});
   }
 }
