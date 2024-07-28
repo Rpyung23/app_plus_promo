@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-const BASE_URL = "http://66.240.205.86:3010";
+const BASE_URL = "http://192.168.100.10:3010";
 
 const headersApi = {
   'Content-Type': 'application/json; charset=UTF-8',

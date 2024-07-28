@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -126,7 +128,11 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
         TextFormField(
             controller: widget.oTextEditingControllerFExp,
             keyboardType: TextInputType.datetime,
-            showCursor: true,
+            //showCursor: true,
+            readOnly: true,
+            onTap: () async {
+              await _selectDate(context);
+            },
             decoration: InputDecoration(
                 prefixIcon: icon_fecha,
                 hintText: "Fecha de expiración",
@@ -341,5 +347,20 @@ class _CreateCuponPageState extends State<CreateCuponPage> {
       print(e.toString());
     }
     setState(() {});
+  }
+
+  _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      locale: Locale('es'),
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (pickedDate != null && pickedDate != DateTime.now())
+      setState(() {
+        widget.oTextEditingControllerFExp.text =
+            "${pickedDate.toLocal()}".split(' ')[0];
+      });
   }
 }

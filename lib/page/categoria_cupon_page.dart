@@ -11,8 +11,8 @@ import '../util/dimensiones.dart';
 import '../util/textos.dart';
 
 class CategoriaCuponPage extends StatefulWidget {
+  bool apiCategoria = true;
   List<DatoCategorieModel> oDatoCategorieList = [];
-
   CategoriaCuponPage({super.key});
 
   @override
@@ -154,16 +154,22 @@ class _CategoriaCuponPageState extends State<CategoriaCuponPage> {
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: textBig),
           ),
           SizedBox(height: marginSmall),
-          Container(
-            height: 400,
-            child: ListView.builder(
-              itemCount: widget.oDatoCategorieList.length,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return _getCategorias(widget.oDatoCategorieList[index]);
-              },
-            ),
-          )
+          widget.apiCategoria
+              ? Center(
+                  child: CircularProgressIndicator(
+                    color: color_primary,
+                  ),
+                )
+              : Container(
+                  height: 400,
+                  child: ListView.builder(
+                    itemCount: widget.oDatoCategorieList.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return _getCategorias(widget.oDatoCategorieList[index]);
+                    },
+                  ),
+                )
         ],
       ),
     );
@@ -221,6 +227,7 @@ class _CategoriaCuponPageState extends State<CategoriaCuponPage> {
   _initApiCategoria() async {
     ModelCategorie oM = await ProviderCategorie.readCategoriaModel();
     widget.oDatoCategorieList = oM!.datos!;
+    widget.apiCategoria = false;
     setState(() {});
   }
 }

@@ -31,7 +31,8 @@ class _ProfileClientPageState extends State<ProfileClientPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: color_secondary),
+        //iconTheme: IconThemeData(color: color_secondary),
+        automaticallyImplyLeading: false,
         backgroundColor: color_primary,
         title: Text(
           "PERFIL DE USUARIO",
@@ -115,6 +116,12 @@ class _ProfileClientPageState extends State<ProfileClientPage> {
               : Image.network(
                   widget.oProfileClientModel!.datos!.fotoCliente!,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      "assets/not_image.jpg",
+                      fit: BoxFit.cover,
+                    );
+                  },
                 )),
     );
   }

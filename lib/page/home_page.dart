@@ -1,8 +1,12 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'package:flutter/material.dart';
 import 'package:plus_promo/page/categoria_cupon_page.dart';
 import 'package:plus_promo/page/cupones_list_page.dart';
 import 'package:plus_promo/util/icons.dart';
 import 'package:plus_promo/util/textos.dart';
+
+import 'profile_client_page.dart';
 
 class HomePage extends StatefulWidget {
   int opc_menu = 0;
@@ -22,11 +26,7 @@ class _HomePageState extends State<HomePage> {
             currentIndex: widget.opc_menu,
             onTap: (value) {
               setState(() {
-                if (value == 2) {
-                  Navigator.of(context).pushNamed('/profile_cliente_page');
-                } else {
-                  widget.opc_menu = value;
-                }
+                widget.opc_menu = value;
               });
             },
             items: const [
@@ -51,8 +51,12 @@ class _HomePageState extends State<HomePage> {
         return CuponesListPage(
           id_categoria: null,
         );
+      case 2:
+        return ProfileClientPage();
       default:
-        return CategoriaCuponPage();
+        return Center(
+          child: Text("DEFAULT NAVIGATOR"),
+        );
     }
   }
 }

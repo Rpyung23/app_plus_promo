@@ -92,7 +92,9 @@ class _HomeVendedorState extends State<HomeVendedor> {
 
   _getBodyHomeVendedor() {
     return widget.oListCuponModel.datos!.length == 0
-        ? CircularProgressIndicator()
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
         : Container(
             padding: EdgeInsets.all(marginSmallSmall),
             child: ListView.builder(
@@ -127,7 +129,7 @@ class _HomeVendedorState extends State<HomeVendedor> {
                   fontSize: textBigMedium),
             ),
             subtitle: Text(
-              "DISPONIBLE : " + oD!.cantCupon.toString(),
+              "DISPONIBLE : ${oD!.disponible_cupon}",
               style: TextStyle(fontSize: textMediumSmall),
             ),
             trailing: IconButton(
@@ -168,7 +170,8 @@ class _HomeVendedorState extends State<HomeVendedor> {
           children: [
             ElevatedButton(
               onPressed: () async {
-                Navigator.of(context).pushNamed('/qr_scanner_page');
+                await Navigator.of(context).pushNamed('/qr_scanner_page');
+                _getCuponLista();
               },
               child: icon_camera,
               style: ElevatedButton.styleFrom(

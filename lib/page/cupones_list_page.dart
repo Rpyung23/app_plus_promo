@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_string_interpolations
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -69,18 +71,25 @@ class _CuponesListPageState extends State<CuponesListPage> {
             oDatoCuponLista.fotoCupon!,
             fit: BoxFit.cover,
             repeat: ImageRepeat.noRepeat,
+            errorBuilder: (context, error, stackTrace) {
+              return Image.asset(
+                'assets/not_image.jpg',
+                fit: BoxFit.cover,
+                repeat: ImageRepeat.noRepeat,
+              );
+            },
             height: 75,
             width: 75,
           ),
           title: Text(
-            oDatoCuponLista.nombreCupon!,
+            "${oDatoCuponLista.nombreCupon!}",
             style: TextStyle(
                 fontWeight: FontWeight.w700,
                 color: color_accent,
                 fontSize: textBigMedium),
           ),
           subtitle: Text(
-            oDatoCuponLista.fechaExpiracion!,
+            "${oDatoCuponLista.fechaExpiracion!}",
             style: TextStyle(
                 fontWeight: FontWeight.w300,
                 color: color_accent,

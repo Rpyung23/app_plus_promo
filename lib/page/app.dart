@@ -12,6 +12,7 @@ import 'cupones_list_page.dart';
 import 'login_page.dart';
 import 'session_page.dart';
 import 'stadistics_page.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class AppPage extends StatelessWidget {
   const AppPage({super.key});
@@ -21,6 +22,14 @@ class AppPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: '+ PROMO',
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('es', 'ES'), // Español
+      ],
       debugShowCheckedModeBanner: false,
       routes: {
         '/carrusel_page': (_) => CarruselPage(),
