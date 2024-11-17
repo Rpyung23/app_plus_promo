@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -234,10 +236,12 @@ class _StaticsPageState extends State<StaticsPage> {
       );
     }
     List<ChartData> chartData = [
-      ChartData('NO CANJEADOS', widget.oModelStaticCupon!.disponibleCuponVn!,
-          color_primary),
       ChartData(
-          'EXPIRADOS', widget.oModelStaticCupon!.cantCuponVn!, color_warning),
+          'NO CANJEADOS',
+          double.parse(widget.oModelStaticCupon!.disponibleCuponVn!),
+          color_primary),
+      ChartData('EXPIRADOS',
+          double.parse(widget.oModelStaticCupon!.cantCuponVn!), color_warning),
     ];
 
     return SfCircularChart(
@@ -269,10 +273,12 @@ class _StaticsPageState extends State<StaticsPage> {
       );
     }
     List<ChartData> chartData = [
-      ChartData('DISPONIBLES', widget.oModelStaticCupon!.disponibleCuponOcp!,
-          color_success),
       ChartData(
-          'CANJEADOS', widget.oModelStaticCupon!.cantCuponOcp!, color_danger),
+          'DISPONIBLES',
+          double.parse(widget.oModelStaticCupon!.disponibleCuponOcp!),
+          color_success),
+      ChartData('CANJEADOS',
+          double.parse(widget.oModelStaticCupon!.cantCuponOcp!), color_danger),
     ];
 
     return SfCircularChart(

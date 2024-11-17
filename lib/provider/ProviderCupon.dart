@@ -93,6 +93,7 @@ class ProviderCreateCupon {
           body: jsonEncode({"user": usuario, "cupon": cupon}));
       return ResponseModel.fromRawJson(oR.body);
     } catch (e) {
+      print(e);
       return ResponseModel(statusCode: 200, msm: e.toString());
     }
   }

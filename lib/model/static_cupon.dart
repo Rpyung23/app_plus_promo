@@ -3,11 +3,11 @@ import 'dart:convert';
 class ModelStaticCupon {
   int? statusCode;
   String? msm;
-  double? cantCuponVn;
-  double? disponibleCuponVn;
+  String? cantCuponVn;
+  String? disponibleCuponVn;
   int? totVn;
-  double? cantCuponOcp;
-  double? disponibleCuponOcp;
+  String? cantCuponOcp;
+  String? disponibleCuponOcp;
   int? totOcp;
 
   ModelStaticCupon({
